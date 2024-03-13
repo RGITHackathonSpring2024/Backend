@@ -1,0 +1,28 @@
+{
+  "name": "enter-the-company-server",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "license": "AllRightsReserved",
+  "dependencies": {
+    "@prisma/client": "^5.11.0",
+    "bcryptjs": "^2.4.3",
+    "fastest-validator": "^1.17.0",
+    "fastest-validator-decorators": "^2.1.1",
+    "hyper-express": "^6.14.12",
+    "jsonwebtoken": "^9.0.2",
+    "moleculer": "^0.14.32",
+    "moleculer-plus": "^0.0.1",
+    "moleculer-repl": "^0.7.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.11.27",
+    "prisma": "^5.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "scripts": {
+    "start": "tsc && moleculer-runner --repl ./dist/services/**/index.js"
+  }
+}
