@@ -23,15 +23,29 @@ model Session {
   Token      String
 }
 
-enum GameAccess {
-  ENTER_THE_COPMANY
+model Game {
+  Identifier String   @id @default(auto()) @map("_id") @db.ObjectId
+  Name       String
+  Access     Access[] @relation("access-game")
+}
+
+enum BanReason {
+  NONE
+  DEVELOPER
+  ANTICHEAT
 }
 
 model Access {
-  Identifier String     @id @default(auto()) @map("_id") @db.ObjectId
-  Game       GameAccess
-  User       User       @relation("user-access", fields: [UserID], references: [Identifier])
-  UserID     String     @db.ObjectId
+  Identifier String @id @default(auto()) @map("_id") @db.ObjectId
+
+  Game   Game   @relation("access-game", fields: [GameId], references: [Identifier])
+  GameId String @db.ObjectId
+
+  User   User   @relation("user-access", fields: [UserID], references: [Identifier])
+  UserID String @db.ObjectId
+
+  IsBanned  Boolean   @default(false)
+  BanReason BanReason @default(NONE)
 }
 
 datasource db {
