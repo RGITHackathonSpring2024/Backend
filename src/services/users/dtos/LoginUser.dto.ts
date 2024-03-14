@@ -1,4 +1,7 @@
-import { IsString } from "moleculer-plus";
+import { IsArray, IsString } from "moleculer-plus";
+import { AUTH_SCOPES_ARRAY } from "./Scopes.dto";
+
+
 
 export class LoginUserDto {
   @IsString()
@@ -6,4 +9,7 @@ export class LoginUserDto {
 
   @IsString()
   Password: string;
+
+  @IsArray()
+  Scopes: string[]
 }

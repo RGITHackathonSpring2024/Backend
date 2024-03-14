@@ -37,6 +37,7 @@ export default class GatewayService extends Service {
       if (err.message === "userError") return console.error(err);
 
       if (err) {
+        this.logger.error(err);
         res.json({
           StatusCode: res.statusCode,
           Error: err.message || "Internal Server Error",

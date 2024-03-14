@@ -21,6 +21,7 @@ model Session {
   User       User   @relation("user-session", fields: [UserID], references: [Identifier])
   UserID     String @db.ObjectId
   Token      String
+  Scopes     String[] @default([])
 }
 
 model Game {

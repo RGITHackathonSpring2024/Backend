@@ -60,7 +60,7 @@ export default class UsersService extends Service {
 
   @MoleculerAction({ name: "login-user", params: LoginUserDto })
   public async LoginUser(ctx: Context<LoginUserDto>): Promise<Session | null> {
-    const { Login, Password } = ctx.params;
+    const { Login, Password, Scopes } = ctx.params;
 
     const candidate = await prisma.user.findFirst({ where: { Login } });
 
@@ -82,6 +82,7 @@ export default class UsersService extends Service {
           User: {
             connect: candidate,
           },
+          Scopes
         },
       });
 
@@ -96,7 +97,8 @@ export default class UsersService extends Service {
   public async LoginSessionUser(
     ctx: Context<LoginSessionUserDto>
   ): Promise<Session | null> {
-    const { UserIdentifier } = ctx.params;
+    const { UserIdentifier, Scopes } = ctx.params;
+    console.log(ctx.params)
 
     const user = await prisma.user.findFirst({
       where: { Identifier: UserIdentifier },
@@ -119,6 +121,7 @@ export default class UsersService extends Service {
         User: {
           connect: user,
         },
+        Scopes
       },
     });
 
