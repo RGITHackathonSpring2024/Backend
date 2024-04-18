@@ -9,44 +9,19 @@ generator client {
 }
 
 model User {
-  Identifier String    @id @default(auto()) @map("_id") @db.ObjectId
-  Login      String
-  Password   String
-  Accesses   Access[]  @relation("user-access")
-  Sessions   Session[] @relation("user-session")
+  Identifier      String    @id @default(auto()) @map("_id") @db.ObjectId
+  Login           String
+  Password        String
+  AccountDisabled Boolean   @default(false)
+  Sessions        Session[] @relation("user-session")
 }
 
 model Session {
-  Identifier String @id @default(auto()) @map("_id") @db.ObjectId
-  User       User   @relation("user-session", fields: [UserID], references: [Identifier])
-  UserID     String @db.ObjectId
+  Identifier String   @id @default(auto()) @map("_id") @db.ObjectId
+  User       User     @relation("user-session", fields: [UserID], references: [Identifier])
+  UserID     String   @db.ObjectId
   Token      String
   Scopes     String[] @default([])
-}
-
-model Game {
-  Identifier String   @id @default(auto()) @map("_id") @db.ObjectId
-  Name       String
-  Access     Access[] @relation("access-game")
-}
-
-enum BanReason {
-  NONE
-  DEVELOPER
-  ANTICHEAT
-}
-
-model Access {
-  Identifier String @id @default(auto()) @map("_id") @db.ObjectId
-
-  Game   Game   @relation("access-game", fields: [GameId], references: [Identifier])
-  GameId String @db.ObjectId
-
-  User   User   @relation("user-access", fields: [UserID], references: [Identifier])
-  UserID String @db.ObjectId
-
-  IsBanned  Boolean   @default(false)
-  BanReason BanReason @default(NONE)
 }
 
 datasource db {
