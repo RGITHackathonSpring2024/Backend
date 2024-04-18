@@ -1,11 +1,11 @@
 {
-  "name": "enter-the-company-server",
+  "name": "Hackathon2024-Spring",
   "version": "1.0.0",
   "main": "./dist/index.js",
-  "license": "AllRightsReserved",
   "dependencies": {
     "@prisma/client": "^5.11.0",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
     "fastest-validator": "^1.17.0",
     "fastest-validator-decorators": "^2.1.1",
     "hyper-express": "^6.14.12",
