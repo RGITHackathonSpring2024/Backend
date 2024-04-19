@@ -13,8 +13,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountState {
+  WAITING_VERIFICATION
+  VERIFIED
+  DISABLED
+}
+
 model User {
-  id       String @id @map("_id")
-  email    String
-  password String
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  email        String       @unique
+  login        String       @unique
+  password     String?
+  accountState AccountState @default(WAITING_VERIFICATION)
 }
