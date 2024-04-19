@@ -8,23 +8,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  Identifier      String    @id @default(auto()) @map("_id") @db.ObjectId
-  Login           String
-  Password        String
-  AccountDisabled Boolean   @default(false)
-  Sessions        Session[] @relation("user-session")
-}
-
-model Session {
-  Identifier String   @id @default(auto()) @map("_id") @db.ObjectId
-  User       User     @relation("user-session", fields: [UserID], references: [Identifier])
-  UserID     String   @db.ObjectId
-  Token      String
-  Scopes     String[] @default([])
-}
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @map("_id")
+  email    String
+  password String
 }
