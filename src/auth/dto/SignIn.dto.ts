@@ -3,13 +3,13 @@ import { IsEmail, IsNotEmpty, IsString, IsStrongPassword, Matches, MaxLength, Mi
 export class SignInDto {
     @IsNotEmpty()
     @IsString()
-    @MinLength(1)
-    @MaxLength(20)
+ //   @MinLength(1)
+  //  @MaxLength(20)
     credential: string
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(8)
-    @MaxLength(32)
+  //  @MinLength(8)
+  //  @MaxLength(32)
     password: string
 }

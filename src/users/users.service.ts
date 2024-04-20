@@ -44,7 +44,7 @@ export class UsersService {
     }
 
     async getAccountById(id: string): Promise<User | null> {
-        return await this.db.user.findFirst({
+        return await this.db.user.findUnique({
             where: {
                 id
             }
@@ -52,7 +52,7 @@ export class UsersService {
     }
 
     async getAccountByLogin(login: string): Promise<User | null> {
-        return await this.db.user.findFirst({
+        return await this.db.user.findUnique({
             where: {
                 login
             }
@@ -60,7 +60,7 @@ export class UsersService {
     }
 
     async getAccountByEmail(email: string): Promise<User | null> {
-        return await this.db.user.findFirst({
+        return await this.db.user.findUnique({
             where: {
                 email
             }

@@ -1,10 +1,3 @@
 
-POST /auth/signIn
-POST /auth/register
-GETA /users/@me
-
+GETA /cards/@me/ - получить карту привязанную к пользователю
 POSTA /cards/@me/
-GETA /cards/@me/
-GETA /cards/@me/id
-
-POSTA /cards/@me/id
