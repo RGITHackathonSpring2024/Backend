@@ -4,6 +4,7 @@ export class SignInDto {
     @IsNotEmpty()
     @IsString()
     @MinLength(1)
+    @MaxLength(20)
     credential: string
 
     @IsNotEmpty()
