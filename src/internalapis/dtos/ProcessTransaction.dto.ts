@@ -15,3 +15,5 @@ export class ProcessTransactionDto {
     @Max(65535)
     amount: number;
 }
+
+// RoboGradeIndustriesTeam
