@@ -7,6 +7,7 @@ import { PrismaModule } from 'src/database/prisma.module';
 @Module({
   imports: [UsersModule, PrismaModule],
   controllers: [CardsController],
-  providers: [CardsService]
+  providers: [CardsService],
+  exports: [CardsService]
 })
 export class CardsModule {}

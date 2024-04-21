@@ -3,11 +3,12 @@ import { User } from '@prisma/client';
 import { genSalt, hash } from 'bcryptjs';
 import { isEmail } from 'class-validator';
 import { PrismaService } from 'src/database/prisma.service';
+import { EmailService } from 'src/email/email.service';
 import { validateEmail } from 'src/utils/validateEmail';
 
 @Injectable()
 export class UsersService {
-    constructor(private db: PrismaService) {}
+    constructor(private db: PrismaService, private emailService: EmailService) {}
 
     async createUser(
         login: string,
@@ -37,9 +38,10 @@ export class UsersService {
                 login,
                 email,
                 password: password ? await hash(password, await genSalt()) : null,
-                accountState: 'WAITING_VERIFICATION'
+                accountState: 'EMAIL_VERIFICATION'
             }
         });
+        await this.emailService.sendVerificationEmail(email, user.id);
         return user;
     }
 

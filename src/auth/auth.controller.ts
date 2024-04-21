@@ -11,9 +11,12 @@ import {
 import { AuthService } from "./auth.service";
 import { SignInDto } from "./dto/SignIn.dto";
 import { RegisterDto } from "./dto/Register.dto";
+import { EnterCodeDto } from "./dto/EnterCode.dto";
 import { UsersService } from "src/users/users.service";
 import { LocalAuthGuard } from "./guards/local.guard";
 import { JwtAuthGuard } from "./guards/jwt.guard";
+import { Request as Req } from "express";
+import { User } from "@prisma/client";
 
 @Controller("auth")
 export class AuthController {
@@ -42,5 +45,22 @@ export class AuthController {
     );
     const jwt = await this.authService.loginUser(user.id);
     return { user, jwt };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("enter-code")
+  @UseGuards(JwtAuthGuard)
+  async enterCode(@Body() dto: EnterCodeDto, @Request() req: Req & {user: User}) {
+    return {
+      user: req.user,
+      isActivated: await this.authService.tryEnterCode(req.user.id, dto.code)
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get("request-code")
+  @UseGuards(JwtAuthGuard)
+  async requestCode(@Request() req: Req & {user: User}) {
+    return {sent: await this.authService.tryRequestCode(req.user.id)}
   }
 }

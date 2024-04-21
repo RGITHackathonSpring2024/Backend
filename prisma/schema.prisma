@@ -8,34 +8,84 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator typescriptInterfaces {
+  provider    = "prisma-generator-typescript-interfaces"
+  dateType    = "string"
+  bigIntType  = "string"
+  bytesType   = "BufferObject"
+  output = "ts-interfaces.d.ts"
+}
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 enum AccountState {
-  WAITING_VERIFICATION
+  EMAIL_VERIFICATION
+  DOCUMENT_VERIFICATION
   VERIFIED
   DISABLED
 }
 
 model User {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  email        String       @unique
-  login        String       @unique
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  email        String        @unique
+  login        String        @unique
   password     String?
-  firstName    String       @default("")
-  lastName     String       @default("")
-  dadName      String       @default("")
-  accountState AccountState @default(WAITING_VERIFICATION)
-  card         Card?        @relation("user-card")
+  firstName    String        @default("")
+  lastName     String        @default("")
+  dadName      String        @default("")
+  accountState AccountState  @default(EMAIL_VERIFICATION)
+  card         Card?         @relation("user-card")
+  application  Application[] @relation("user-applications")
+  EmailCode    EmailCode[]   @relation("user-emails")
+}
+
+enum CardState {
+  ACTIVE
+  BLOCKED
 }
 
 model Card {
-  id                     String   @id @default(auto()) @map("_id") @db.ObjectId
-  balance                Int      @default(0)
+  id                     String        @id @default(auto()) @map("_id") @db.ObjectId
+  balance                Int           @default(0)
   expiration             DateTime
-  permanentAccountNumber Int      @unique
-  userId                 String   @db.ObjectId @unique
-  user                   User     @relation("user-card", fields: [userId], references: [id])
+  permanentAccountNumber String        @unique
+  userId                 String        @unique @db.ObjectId
+  user                   User          @relation("user-card", fields: [userId], references: [id])
+  transaction            Transaction[] @relation("card-transactions")
+  lastToken              String        @default(cuid())
+}
+
+model Institution {
+  id                   String        @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  transactionsAccepted Transaction[] @relation("transaction-instution")
+}
+
+model Transaction {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  amount Int      @default(0)
+  date   DateTime @default(now())
+
+  toInstitution Institution @relation("transaction-instution", fields: [institutionId], references: [id])
+
+  card          Card   @relation("card-transactions", fields: [cardId], references: [id])
+  cardId        String @db.ObjectId
+  institutionId String @db.ObjectId
+}
+
+model Application {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  User   User?   @relation("user-applications", fields: [userId], references: [id])
+  userId String? @db.ObjectId
+}
+
+model EmailCode {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  User        User?   @relation("user-emails", fields: [userId], references: [id])
+  userId      String? @db.ObjectId
+  code        String
+  isActivated Boolean @default(false)
 }
